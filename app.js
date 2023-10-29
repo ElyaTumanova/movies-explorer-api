@@ -6,14 +6,15 @@ const cors = require('cors');
 require('dotenv').config();
 
 const { errors } = require('celebrate'); // специальный мидлвэр celebrate для обработки ошибок
-const auth = require('./middlewares/auth');
+// const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env; // Слушаем 3000 порт
 const app = express(); // создаем объект приложения
 
-// импортируем роуты
-const usersRouter = require('./routes/users');
-const { moviesRouter } = require('./routes/movies');
+// // импортируем роуты
+// const usersRouter = require('./routes/users');
+// const { moviesRouter } = require('./routes/movies');
+const routing = require('./routes/index');
 
 // ошибки
 const NotFoundError = require('./errors/not-found-err');
@@ -35,14 +36,16 @@ app.use(requestLogger); // подключаем логгер запросов
 
 app.use(cors());
 
-app.post('/signup', usersRouter);
-app.post('/signin', usersRouter);
+app.use(routing);
 
-app.use(auth);
+// app.post('/signup', usersRouter);
+// app.post('/signin', usersRouter);
 
-// запускаем роуты
-app.use('/', usersRouter);
-app.use('/', moviesRouter);
+// app.use(auth);
+
+// // запускаем роуты
+// app.use('/', usersRouter);
+// app.use('/', moviesRouter);
 
 app.use('*', (req, res, next) => next(new NotFoundError()));
 
