@@ -6,10 +6,9 @@ const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenRequestError = require('../errors/forbidden-err');
 
-module.exports.getMovies = (req, res, next) => {
+module.exports.getMovies = (req, res, next, err) => {
   Movie.find({})
     .then((movie) => res.send(movie))
-    // eslint-disable-next-line no-undef
     .catch(() => next(err));
 };
 
