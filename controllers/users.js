@@ -10,7 +10,7 @@ const AuthError = require('../errors/auth-error');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.getMyUser = (req, res, next, err) => {
+module.exports.getMyUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -18,6 +18,7 @@ module.exports.getMyUser = (req, res, next, err) => {
       }
       return res.send(user);
     })
+    // eslint-disable-next-line no-undef
     .catch(() => next(err));
 };
 
