@@ -7,11 +7,13 @@ require('dotenv').config();
 const { errors } = require('celebrate'); // специальный мидлвэр celebrate для обработки ошибок
 const auth = require('./middlewares/auth');
 
+const serverPath = require('./utils/constants');
+
 const { PORT = 3000 } = process.env; // Слушаем 3000 порт
 const app = express(); // создаем объект приложения
 
 // импортируем роуты
-const usersRouter = require('./routes/users');
+const { usersRouter, loginRouter, createUserRouter } = require('./routes/users');
 const { moviesRouter } = require('./routes/movies');
 
 // ошибки
@@ -24,7 +26,7 @@ process.on('uncaughtException', (err, origin) => {
 });
 
 // подключаемся к БД
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(serverPath, {
   useNewUrlParser: true,
 });
 
@@ -34,8 +36,8 @@ app.use(requestLogger); // подключаем логгер запросов
 
 app.use(cors());
 
-app.post('/signup', usersRouter);
-app.post('/signin', usersRouter);
+app.post('/signup', createUserRouter);
+app.post('/signin', loginRouter);
 
 app.use(auth);
 

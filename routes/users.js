@@ -1,4 +1,6 @@
 const usersRouter = require('express').Router();
+const createUserRouter = require('express').Router();
+const loginRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 
 const {
@@ -18,7 +20,7 @@ usersRouter.patch(
   updateMyUser,
 );
 
-usersRouter.post(
+createUserRouter.post(
   '/signup',
   celebrate({
     body: Joi.object().keys({
@@ -30,7 +32,7 @@ usersRouter.post(
   createUser,
 );
 
-usersRouter.post(
+loginRouter.post(
   '/signin',
   celebrate({
     body: Joi.object().keys({
@@ -41,4 +43,4 @@ usersRouter.post(
   login,
 );
 
-module.exports = usersRouter;
+module.exports = { usersRouter, loginRouter, createUserRouter };
