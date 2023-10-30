@@ -27,10 +27,10 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findUserByCredentials = function findUser(email, password) {
   return this.findOne({ email }).select('+password')
-    .then((user, next) => {
+    .then((user) => {
       if (!user) {
         console.log('no user');
-        return next(new AuthError());
+        throw new AuthError();
         // return Promise.reject(new AuthError());
       }
       return bcrypt.compare(password, user.password)
