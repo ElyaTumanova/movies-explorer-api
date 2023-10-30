@@ -18,8 +18,7 @@ module.exports.getMyUser = (req, res, next) => {
       }
       return res.send(user);
     })
-    // eslint-disable-next-line no-undef
-    .catch(() => next(err));
+    .catch(() => next());
 };
 
 module.exports.updateMyUser = (req, res, next) => {
@@ -30,6 +29,8 @@ module.exports.updateMyUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError());
+      } if (err.code === 11000) {
+        return next(new ConflictError());
       }
       if (err instanceof mongoose.Error.DocumentNotFoundError) {
         return next(new NotFoundError());
