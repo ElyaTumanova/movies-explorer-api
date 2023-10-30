@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const express = require('express'); // подключение express
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { default: mongoose } = require('mongoose');
 const Movie = require('../models/movie');
 
@@ -7,10 +6,9 @@ const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenRequestError = require('../errors/forbidden-err');
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movie) => res.send(movie))
-    // eslint-disable-next-line no-undef
-    .catch(() => next(err));
+    .catch(() => next());
 };
 
 module.exports.createMovie = (req, res, next) => {
