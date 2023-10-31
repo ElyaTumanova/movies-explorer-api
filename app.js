@@ -9,7 +9,7 @@ const auth = require('./middlewares/auth');
 
 const serverPath = require('./utils/constants');
 
-const { PORT = 3000 } = process.env; // Слушаем 3000 порт
+const { PORT = 3000, DB, NODE_ENV } = process.env; // Слушаем 3000 порт
 const app = express(); // создаем объект приложения
 
 // импортируем роуты
@@ -26,7 +26,7 @@ process.on('uncaughtException', (err, origin) => {
 });
 
 // подключаемся к БД
-mongoose.connect(serverPath, {
+mongoose.connect(NODE_ENV === 'production' ? DB : serverPath, {
   useNewUrlParser: true,
 });
 

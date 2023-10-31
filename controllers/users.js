@@ -14,7 +14,7 @@ module.exports.getMyUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError());
+        return next(new NotFoundError('Пользователь не найден'));
       }
       return res.send(user);
     })
@@ -33,7 +33,7 @@ module.exports.updateMyUser = (req, res, next) => {
         return next(new ConflictError());
       }
       if (err instanceof mongoose.Error.DocumentNotFoundError) {
-        return next(new NotFoundError());
+        return next(new NotFoundError('Пользователь не найден'));
       }
       return next(err);
     });
@@ -71,5 +71,5 @@ module.exports.login = (req, res) => {
       // вернём токен
       return res.send({ token });
     })
-    .catch(() => (new AuthError()));
+    .catch(() => (new AuthError('Email или пароль указаны не верно')));
 };

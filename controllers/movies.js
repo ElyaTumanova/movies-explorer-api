@@ -54,7 +54,7 @@ module.exports.deleteMovieById = (req, res, next) => {
   Movie.findById(req.params._id)
     .then((movie) => {
       if (!movie) {
-        return next(new NotFoundError());
+        return next(new NotFoundError('Фильм не найден'));
       }
       if (movie.owner.toString() !== req.user._id) {
         return next(new ForbiddenRequestError());
