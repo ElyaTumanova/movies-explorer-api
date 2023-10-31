@@ -18,7 +18,7 @@ module.exports.getMyUser = (req, res, next) => {
       }
       return res.send(user);
     })
-    .catch(() => next());
+    .catch((err) => next(err));
 };
 
 module.exports.updateMyUser = (req, res, next) => {
