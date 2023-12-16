@@ -68,14 +68,14 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       if (!user) {
         console.log('no user');
-        next(new AuthError('Пользователь не найден'));
+        return next(new AuthError('Пользователь не найден'));
         // return Promise.reject(new AuthError('Пользователь не найден'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
             console.log('no match');
-            next(new AuthError('Пользователь или пароль указаны не верно'));
+            return next(new AuthError('Пользователь или пароль указаны не верно'));
             // return Promise.reject(new AuthError('Пользователь или пароль указаны не верно'));
           }
 
