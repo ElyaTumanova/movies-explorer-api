@@ -30,12 +30,15 @@ userSchema.statics.findUserByCredentials = function findUser(email, password, ne
     .then((user) => {
       if (!user) {
         console.log('no user');
-        return Promise.reject(new AuthError('Пользователь не найден'));
+        throw new AuthError('Пользователь не найден');
+        // return Promise.reject(new AuthError('Пользователь не найден'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new AuthError('Пользователь или пароль указаны не верно'));
+            console.log('no match');
+            throw new AuthError('Пользователь или пароль указаны не верно');
+            // return Promise.reject(new AuthError('Пользователь или пароль указаны не верно'));
           }
 
           return user; // теперь user доступен
