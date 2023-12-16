@@ -64,7 +64,24 @@ module.exports.createUser = (req, res, next) => {
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  User.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        console.log('no user');
+        // next(new AuthError('Пользователь не найден'));
+        return Promise.reject(new AuthError('Пользователь не найден'));
+      }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            console.log('no match');
+            // next(new AuthError('Пользователь или пароль указаны не верно'));
+            return Promise.reject(new AuthError('Пользователь или пароль указаны не верно'));
+          }
+
+          return user; // теперь user доступен
+        });
+    })
     .then((user) => {
       // создадим токен
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
@@ -73,3 +90,17 @@ module.exports.login = (req, res) => {
     })
     .catch(() => (new AuthError('Email или пароль указаны не верно')));
 };
+
+// module.exports.login = (req, res) => {
+//   const { email, password } = req.body;
+
+//   return User.findUserByCredentials(email, password)
+//     .then((user) => {
+//       // создадим токен
+//       const token = jwt.sign({ _id: user._id },
+// NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+//       // вернём токен
+//       return res.send({ token });
+//     })
+//     .catch(() => (new AuthError('Email или пароль указаны не верно')));
+// };
